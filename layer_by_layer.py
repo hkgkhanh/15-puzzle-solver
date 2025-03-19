@@ -100,13 +100,110 @@ def solve_layer_by_layer(board, GOAL_STATE):
                 prev_cell_y, prev_cell_x = cell_y, cell_x
                 sequence_index = 0
                 continue
-            # print(sequence)
-            # print(sequence_index)
-            # time.sleep(0.5)
             sequence_index += 1
 
     # return solution_steps
     # solve 2
-    
+    goal_y, goal_x = find_pos(GOAL_STATE, 2)
+    cell_y, cell_x = find_pos(board, 2)
+    zero_y, zero_x = find_pos(board, 0)
+
+    if cell_y != goal_y or cell_x != goal_x:
+
+        # move 0 to goal position
+        if zero_x != 0:
+            if zero_y != goal_y:
+                for _ in range(goal_y, zero_y):
+                    add_move(board, solution_steps, "U")
+            
+            if zero_x != goal_x:
+                for _ in range(goal_x, zero_x):
+                    add_move(board, solution_steps, "L")
+
+        else:
+            if zero_y != 1:
+                for _ in range(1, zero_y):
+                    add_move(board, solution_steps, "U")
+            add_move(board, solution_steps, "R")
+            add_move(board, solution_steps, "U")
+
+        # move 2 to goal position
+        cell_y, cell_x = find_pos(board, 2)
+        zero_y, zero_x = find_pos(board, 0)
+
+        if cell_x != 0:
+            sequence = []
+            if cell_y == goal_y and cell_x != goal_x:
+                for _ in range(goal_x, cell_x):
+                    sequence.append("R")
+                sequence.append("D")
+                for _ in range(goal_x, cell_x):
+                    sequence.append("L")
+                sequence.append("U")
+            
+            elif cell_y != goal_y and cell_x == goal_x:
+                for _ in range(goal_y, cell_y):
+                    sequence.append("D")
+                sequence.append("R")
+                for _ in range(goal_y, cell_y):
+                    sequence.append("U")
+                sequence.append("L")
+            
+            elif cell_y != goal_y and cell_x != goal_x:
+                for _ in range(goal_x, cell_x):
+                    sequence.append("R")
+                for _ in range(goal_y, cell_y):
+                    sequence.append("D")
+                for _ in range(goal_x, cell_x):
+                    sequence.append("L")
+                for _ in range(goal_y, cell_y):
+                    sequence.append("U")
+
+            sequence_index = 0
+            prev_cell_y, prev_cell_x = cell_y, cell_x
+            while cell_y != goal_y or cell_x != goal_x:
+                add_move(board, solution_steps, sequence[sequence_index % len(sequence)])
+                cell_y, cell_x = find_pos(board, 2)
+                if (sequence_index + 1) % len(sequence) == 0:
+                    if prev_cell_x != cell_x and sequence.count("R") > 1:
+                        sequence.remove("R")
+                        sequence.remove("L")
+                    if prev_cell_y != cell_y and sequence.count("U") > 1:
+                        sequence.remove("U")
+                        sequence.remove("D")
+                    prev_cell_y, prev_cell_x = cell_y, cell_x
+                    sequence_index = 0
+                    continue
+                sequence_index += 1
+
+        else:
+            sequence = ["D", "L"]
+            depth = cell_y
+            if depth == 1:
+                depth += 1
+            
+            for _ in range(depth - 1):
+                sequence.append("D")
+            sequence.append("R")
+            sequence.append("R")
+            for _ in range(depth):
+                sequence.append("U")
+            sequence.append("L")
+
+            sequence_index = 0
+            prev_cell_y, prev_cell_x = cell_y, cell_x
+            while cell_y != goal_y or cell_x != goal_x:
+                add_move(board, solution_steps, sequence[sequence_index % len(sequence)])
+                cell_y, cell_x = find_pos(board, 2)
+                if (sequence_index + 1) % len(sequence) == 0:
+                    if prev_cell_y != cell_y and sequence.count("D") > 2:
+                        sequence.reverse()
+                        sequence.remove("U")
+                        sequence.remove("D")
+                        sequence.reverse()
+                    prev_cell_y, prev_cell_x = cell_y, cell_x
+                    sequence_index = 0
+                    continue
+                sequence_index += 1
 
     return solution_steps
