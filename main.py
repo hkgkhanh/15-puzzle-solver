@@ -6,6 +6,18 @@ import copy
 
 from scramble import scramble
 
+def cancel_moves(moves):
+    opposite = {"L": "R", "R": "L", "U": "D", "D": "U"}
+    stack = []
+
+    for move in moves:
+        if stack and stack[-1] == opposite.get(move):
+            stack.pop()
+        else:
+            stack.append(move)
+
+    return stack
+
 def compress_solution(moves):
 
     if len(moves) == 0:
@@ -62,10 +74,10 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [1,0,9,6],
-        [4,3,8,15],
-        [7,12,5,13],
-        [2,14,10,11]
+        [11,8,13,3],
+        [12,1,7,5],
+        [0,6,15,4],
+        [9,10,2,14]
     ]
 
     initial_board = scramble()
@@ -83,6 +95,8 @@ if __name__ == "__main__":
     start_time = time.perf_counter()
 
     steps = solve_layer_by_layer(initial_board, GOAL_STATE)
+
+    steps = cancel_moves(steps)
 
     end_time = time.perf_counter()
 
@@ -113,9 +127,4 @@ if __name__ == "__main__":
                     print(running_board[y][x], "\t", end="")
             print("\n")
         print("Move count:", i + 1)
-        time.sleep(0.1)
-
-# note to self:
-# 1. check nó đã ở đúng vị trí chưa
-# 2. check ô 0 đến vị trí target chưa
-# 3. 0 ở target rồi thì mới đưa nó vào target
+        time.sleep(0.08)
