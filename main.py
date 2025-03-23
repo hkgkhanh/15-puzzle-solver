@@ -3,7 +3,9 @@ import os
 import platform
 import time
 import copy
+import tkinter as tk
 
+from plot_board import  PuzzleSolverGUI
 from scramble import scramble
 
 def cancel_moves(moves):
@@ -81,50 +83,73 @@ if __name__ == "__main__":
     ]
 
     initial_board = scramble()
+    algorithm_names = ["Layer by Layer", "IDA*", "A*"]
+    all_solutions = []
+    all_times = []
 
-    for y in range(4):
-        for x in range(4):
-            if initial_board[y][x] == 0:
-                print("\t", end="")
-            else:
-                print(initial_board[y][x], "\t", end="")
-        print("\n")
+    # for y in range(4):
+    #     for x in range(4):
+    #         if initial_board[y][x] == 0:
+    #             print("\t", end="")
+    #         else:
+    #             print(initial_board[y][x], "\t", end="")
+    #     print("\n")
 
     running_board = copy.deepcopy(initial_board)
 
     start_time = time.perf_counter()
 
-    steps = solve_layer_by_layer(initial_board, GOAL_STATE)
+    lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
 
-    steps = cancel_moves(steps)
+    lbl_steps = cancel_moves(lbl_steps)
 
     end_time = time.perf_counter()
 
+    all_times.append((end_time - start_time) * 1000)
+
+    ida_steps = ["R", "R", "D"]
+    astar_steps = ["R", "R", "D", "L"]
+
+    all_solutions.append(lbl_steps)
+    all_solutions.append(ida_steps)
+    all_solutions.append(astar_steps)
+
+    all_times.append(0)
+    all_times.append(100)
 
 
-    clear_terminal()
-    print("Solution:", compress_solution(steps))
-    print("Solution found in", (end_time - start_time) * 1000, "ms")
-    for y in range(4):
-        for x in range(4):
-            if running_board[y][x] == 0:
-                print("\t", end="")
-            else:
-                print(running_board[y][x], "\t", end="")
-        print("\n")
-    print("move count: 0")
+    # Tạo cửa sổ Tkinter
+    root = tk.Tk()
+    root.title("15 Puzzle Solver")
+    app = PuzzleSolverGUI(root, running_board, algorithm_names, all_solutions, all_times)
+    root.after(2000, lambda: app.update_puzzle(all_solutions))
+    root.mainloop()
 
-    for i, move in enumerate(steps):
-        clear_terminal()
-        print("Solution:", compress_solution(steps))
-        print("Solution found in", (end_time - start_time) * 1000, "ms")
-        do_move(running_board, move)
-        for y in range(4):
-            for x in range(4):
-                if running_board[y][x] == 0:
-                    print("\t", end="")
-                else:
-                    print(running_board[y][x], "\t", end="")
-            print("\n")
-        print("Move count:", i + 1)
-        time.sleep(0.08)
+
+
+    # clear_terminal()
+    # print("Solution:", compress_solution(steps))
+    # print("Solution found in", (end_time - start_time) * 1000, "ms")
+    # for y in range(4):
+    #     for x in range(4):
+    #         if running_board[y][x] == 0:
+    #             print("\t", end="")
+    #         else:
+    #             print(running_board[y][x], "\t", end="")
+    #     print("\n")
+    # print("move count: 0")
+
+    # for i, move in enumerate(steps):
+    #     clear_terminal()
+    #     print("Solution:", compress_solution(steps))
+    #     print("Solution found in", (end_time - start_time) * 1000, "ms")
+    #     do_move(running_board, move)
+    #     for y in range(4):
+    #         for x in range(4):
+    #             if running_board[y][x] == 0:
+    #                 print("\t", end="")
+    #             else:
+    #                 print(running_board[y][x], "\t", end="")
+    #         print("\n")
+    #     print("Move count:", i + 1)
+    #     time.sleep(0.08)
