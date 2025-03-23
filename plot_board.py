@@ -54,9 +54,11 @@ class PuzzleSolverGUI:
             puzzle = PuzzleGUI(frame, new_board)
             self.puzzles.append(puzzle)
 
-            tk.Label(self.main_frame, text=algorithms[i], font=("Arial", 10, "bold")).grid(row=1, column=i, pady=5)
-            tk.Label(self.main_frame, text=f"Solution found in {self.all_times[i]:.5f} ms\nMove count: {len(self.all_solutions[i])}", font=("Arial", 10, "bold")).grid(row=1, column=i, pady=5)
+            label1 = tk.Label(self.main_frame, text=algorithms[i], font=("Arial", 10, "bold"))
+            label1.grid(row=1, column=i, pady=5)
 
+            label2 = tk.Label(self.main_frame, text=f"Solution found in {self.all_times[i]:.5f} ms\nMove count: {len(self.all_solutions[i])}", font=("Arial", 10))
+            label2.grid(row=2, column=i, pady=5)
 
     def update_puzzle(self, all_solutions):
         """

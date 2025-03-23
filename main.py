@@ -83,7 +83,7 @@ if __name__ == "__main__":
     ]
 
     initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "IDA*", "A*"]
+    algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
     all_solutions = []
     all_times = []
 
@@ -109,13 +109,16 @@ if __name__ == "__main__":
 
     ida_steps = ["R", "R", "D"]
     astar_steps = ["R", "R", "D", "L"]
+    other_steps = []
 
     all_solutions.append(lbl_steps)
     all_solutions.append(ida_steps)
     all_solutions.append(astar_steps)
+    all_solutions.append(other_steps)
 
     all_times.append(0)
     all_times.append(100)
+    all_times.append(123)
 
 
     # Tạo cửa sổ Tkinter
