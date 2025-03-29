@@ -1,132 +1,132 @@
-from layer_by_layer import solve_layer_by_layer
-import os
-import platform
-import time
-import copy
-import tkinter as tk
+# from layer_by_layer import solve_layer_by_layer
+# import os
+# import platform
+# import time
+# import copy
+# import tkinter as tk
 
-from plot_board import  PuzzleSolverGUI
-from scramble import scramble
+# from plot_board import  PuzzleSolverGUI
+# from scramble import scramble
 
-def cancel_moves(moves):
-    opposite = {"L": "R", "R": "L", "U": "D", "D": "U"}
-    stack = []
+# def cancel_moves(moves):
+#     opposite = {"L": "R", "R": "L", "U": "D", "D": "U"}
+#     stack = []
 
-    for move in moves:
-        if stack and stack[-1] == opposite.get(move):
-            stack.pop()
-        else:
-            stack.append(move)
+#     for move in moves:
+#         if stack and stack[-1] == opposite.get(move):
+#             stack.pop()
+#         else:
+#             stack.append(move)
 
-    return stack
+#     return stack
 
-def compress_solution(moves):
+# def compress_solution(moves):
 
-    if len(moves) == 0:
-        return ""
+#     if len(moves) == 0:
+#         return ""
 
-    compressed = []
-    count = 1
+#     compressed = []
+#     count = 1
 
-    for i in range(1, len(moves)):
-        if moves[i] == moves[i - 1]:
-            count += 1
-        else:
-            compressed.append(moves[i - 1] + (str(count) if count > 1 else ""))
-            count = 1
+#     for i in range(1, len(moves)):
+#         if moves[i] == moves[i - 1]:
+#             count += 1
+#         else:
+#             compressed.append(moves[i - 1] + (str(count) if count > 1 else ""))
+#             count = 1
 
-    compressed.append(moves[-1] + (str(count) if count > 1 else ""))  # Xử lý ký tự cuối cùng
-    return " ".join(compressed)
+#     compressed.append(moves[-1] + (str(count) if count > 1 else ""))  # Xử lý ký tự cuối cùng
+#     return " ".join(compressed)
 
-def clear_terminal():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
+# def clear_terminal():
+#     if platform.system() == "Windows":
+#         os.system("cls")
+#     else:
+#         os.system("clear")
 
-def find_pos(board, target):
-    for i in range(4):
-        for j in range(4):
-            if board[i][j] == target:
-                return i, j
+# def find_pos(board, target):
+#     for i in range(4):
+#         for j in range(4):
+#             if board[i][j] == target:
+#                 return i, j
 
-def do_move(board, move): # R = 0 to right, L = 0 to left, U = 0 to up, D = 0 to down
-    dy, dx = 0, 0
-    if move == "R":
-        dx = 1
-        dy = 0
-    elif move == "L":
-        dx = -1
-        dy = 0
-    elif move == "U":
-        dx = 0
-        dy = -1
-    elif move == "D":
-        dx = 0
-        dy = 1
+# def do_move(board, move): # R = 0 to right, L = 0 to left, U = 0 to up, D = 0 to down
+#     dy, dx = 0, 0
+#     if move == "R":
+#         dx = 1
+#         dy = 0
+#     elif move == "L":
+#         dx = -1
+#         dy = 0
+#     elif move == "U":
+#         dx = 0
+#         dy = -1
+#     elif move == "D":
+#         dx = 0
+#         dy = 1
 
-    zero_y, zero_x = find_pos(board, 0)
-    temp = board[zero_y][zero_x]
-    board[zero_y][zero_x] = board[zero_y + dy][zero_x + dx]
-    board[zero_y + dy][zero_x + dx] = temp
+#     zero_y, zero_x = find_pos(board, 0)
+#     temp = board[zero_y][zero_x]
+#     board[zero_y][zero_x] = board[zero_y + dy][zero_x + dx]
+#     board[zero_y + dy][zero_x + dx] = temp
 
-# Trạng thái đã hoàn thành
-GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
-
-
-if __name__ == "__main__":
-    initial_board = [
-        [11,8,13,3],
-        [12,1,7,5],
-        [0,6,15,4],
-        [9,10,2,14]
-    ]
-
-    initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
-    all_solutions = []
-    all_times = []
-
-    # for y in range(4):
-    #     for x in range(4):
-    #         if initial_board[y][x] == 0:
-    #             print("\t", end="")
-    #         else:
-    #             print(initial_board[y][x], "\t", end="")
-    #     print("\n")
-
-    running_board = copy.deepcopy(initial_board)
-
-    start_time = time.perf_counter()
-
-    lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
-
-    lbl_steps = cancel_moves(lbl_steps)
-
-    end_time = time.perf_counter()
-
-    all_times.append((end_time - start_time) * 1000)
-
-    ida_steps = ["R", "R", "D"]
-    astar_steps = ["R", "R", "D", "L"]
-    other_steps = []
-
-    all_solutions.append(lbl_steps)
-    all_solutions.append(ida_steps)
-    all_solutions.append(astar_steps)
-    all_solutions.append(other_steps)
-
-    all_times.append(0)
-    all_times.append(100)
-    all_times.append(123)
+# # Trạng thái đã hoàn thành
+# GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 
-    # Tạo cửa sổ Tkinter
-    root = tk.Tk()
-    root.title("15 Puzzle Solver")
-    app = PuzzleSolverGUI(root, running_board, algorithm_names, all_solutions, all_times)
-    root.after(2000, lambda: app.update_puzzle(all_solutions))
-    root.mainloop()
+# if __name__ == "__main__":
+#     initial_board = [
+#         [11,8,13,3],
+#         [12,1,7,5],
+#         [0,6,15,4],
+#         [9,10,2,14]
+#     ]
+
+#     initial_board = scramble()
+#     algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
+#     all_solutions = []
+#     all_times = []
+
+#     # for y in range(4):
+#     #     for x in range(4):
+#     #         if initial_board[y][x] == 0:
+#     #             print("\t", end="")
+#     #         else:
+#     #             print(initial_board[y][x], "\t", end="")
+#     #     print("\n")
+
+#     running_board = copy.deepcopy(initial_board)
+
+#     start_time = time.perf_counter()
+
+#     lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
+
+#     lbl_steps = cancel_moves(lbl_steps)
+
+#     end_time = time.perf_counter()
+
+#     all_times.append((end_time - start_time) * 1000)
+
+#     ida_steps = ["R", "R", "D"]
+#     astar_steps = ["R", "R", "D", "L"]
+#     other_steps = []
+
+#     all_solutions.append(lbl_steps)
+#     all_solutions.append(ida_steps)
+#     all_solutions.append(astar_steps)
+#     all_solutions.append(other_steps)
+
+#     all_times.append(0)
+#     all_times.append(100)
+#     all_times.append(123)
+
+
+#     # Tạo cửa sổ Tkinter
+#     root = tk.Tk()
+#     root.title("15 Puzzle Solver")
+#     app = PuzzleSolverGUI(root, running_board, algorithm_names, all_solutions, all_times)
+#     root.after(2000, lambda: app.update_puzzle(all_solutions))
+#     root.mainloop()
 
 
 
@@ -156,3 +156,119 @@ if __name__ == "__main__":
     #         print("\n")
     #     print("Move count:", i + 1)
     #     time.sleep(0.08)
+
+from layer_by_layer import solve_layer_by_layer
+from bfs import solve_bfs
+import os
+import platform
+import time
+import copy
+import tkinter as tk
+
+from plot_board import PuzzleSolverGUI
+from scramble import scramble
+
+def cancel_moves(moves):
+    opposite = {"L": "R", "R": "L", "U": "D", "D": "U"}
+    stack = []
+    for move in moves:
+        if stack and stack[-1] == opposite.get(move):
+            stack.pop()
+        else:
+            stack.append(move)
+    return stack
+
+def compress_solution(moves):
+    if len(moves) == 0:
+        return ""
+    compressed = []
+    count = 1
+    for i in range(1, len(moves)):
+        if moves[i] == moves[i - 1]:
+            count += 1
+        else:
+            compressed.append(moves[i - 1] + (str(count) if count > 1 else ""))
+            count = 1
+    compressed.append(moves[-1] + (str(count) if count > 1 else ""))
+    return " ".join(compressed)
+
+def clear_terminal():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def find_pos(board, target):
+    for i in range(4):
+        for j in range(4):
+            if board[i][j] == target:
+                return i, j
+
+def do_move(board, move):
+    dy, dx = 0, 0
+    if move == "R":
+        dx = 1
+        dy = 0
+    elif move == "L":
+        dx = -1
+        dy = 0
+    elif move == "U":
+        dx = 0
+        dy = -1
+    elif move == "D":
+        dx = 0
+        dy = 1
+    zero_y, zero_x = find_pos(board, 0)
+    temp = board[zero_y][zero_x]
+    board[zero_y][zero_x] = board[zero_y + dy][zero_x + dx]
+    board[zero_y + dy][zero_x + dx] = temp
+
+GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
+
+if __name__ == "__main__":
+    initial_board = scramble()
+    algorithm_names = ["Layer by Layer", "IDA*", "A*", "BFS"]
+    all_solutions = []
+    all_times = []
+
+    # Layer by Layer
+    running_board_lbl = copy.deepcopy(initial_board)  # Create a copy for Layer by Layer
+    start_time = time.perf_counter()
+    lbl_steps = solve_layer_by_layer(running_board_lbl, GOAL_STATE)
+    lbl_steps = cancel_moves(lbl_steps)
+    end_time = time.perf_counter()
+    all_solutions.append(lbl_steps)
+    all_times.append((end_time - start_time) * 1000)
+
+    # IDA* (Placeholder)
+    ida_steps = ["R", "R", "D"]
+    all_solutions.append(ida_steps)
+    all_times.append(0)
+
+    # A* (Placeholder)
+    astar_steps = ["R", "R", "D", "L"]
+    all_solutions.append(astar_steps)
+    all_times.append(100)
+
+    # BFS
+    running_board_bfs = copy.deepcopy(initial_board)  # Create a fresh copy for BFS
+
+    def update_gui(board):
+        """Callback function to update the GUI during BFS"""
+        app.puzzles[-1].board = copy.deepcopy(board)  # Update BFS puzzle board
+        app.puzzles[-1].draw_board()  # Redraw the board
+        root.update_idletasks()  # Refresh the UI
+
+    start_time = time.perf_counter()
+    bfs_steps = solve_bfs(running_board_bfs, GOAL_STATE, update_gui)  # Pass the callback
+    end_time = time.perf_counter()
+
+    all_solutions.append(bfs_steps if bfs_steps else [])
+    all_times.append((end_time - start_time) * 1000)
+
+
+    root = tk.Tk()
+    root.title("15 Puzzle Solver")
+    app = PuzzleSolverGUI(root, initial_board, algorithm_names, all_solutions, all_times) #Pass the initial board to the GUI
+    root.after(2000, lambda: app.update_puzzle(all_solutions))
+    root.mainloop()
