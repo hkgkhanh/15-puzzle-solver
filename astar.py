@@ -41,8 +41,6 @@ def reconstruct_path(came_from, current):
 def solve_astar(initial_board, goal_state):
     size = len(initial_board)
     goal_list = sum(goal_state, [])
-    print(initial_board)
-    print(goal_state)
     open_set = []
     heapq.heappush(open_set, (0, initial_board))
     came_from = {}
