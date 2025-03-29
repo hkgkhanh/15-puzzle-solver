@@ -52,15 +52,13 @@ def solve_bfs(initial_board, goal_state, update_gui_callback):
         return tuple(sum(board, []))
 
     if not is_solvable(initial_board):
-        print("❌ Initial board is unsolvable!")
+        print("Initial board is unsolvable!")
         return []
 
     initial_state = (initial_board, [])  # (board, path_to_here)
     queue = deque([initial_state])
     visited = {board_to_tuple(initial_board)}
     goal_tuple = board_to_tuple(goal_state)
-
-    print("🔍 Starting BFS search...")
     
     def bfs_search():
         while queue:
@@ -78,7 +76,7 @@ def solve_bfs(initial_board, goal_state, update_gui_callback):
                     visited.add(neighbor_tuple)
                     queue.append((neighbor_board, path + [move]))  # Append the move to the path
         
-        print("❌ No solution found.")
+        print("No solution found.")
         return []  # Return empty list if no solution found
     
     search_thread = threading.Thread(target=bfs_search)
