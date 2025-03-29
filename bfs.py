@@ -24,11 +24,11 @@ def is_solvable(board):
     zero_row = find_pos(board, 0)[0]  # Get row of blank (0)
     return (inv_count % 2 == 0) if zero_row % 2 == 1 else (inv_count % 2 == 1)
 
-def solve_bfs(initial_board, goal_state, update_gui_callback):
-    """Solves the 15-puzzle using Breadth-First Search and updates the GUI in real-time."""
+def solve_bfs(initial_board, goal_state):
+    """Giải bài toán 15-puzzle bằng BFS và trả về danh sách các bước di chuyển."""
     
     def get_neighbors(board):
-        """Generates neighboring board states by moving the blank tile."""
+        """Sinh các trạng thái bảng kế tiếp bằng cách di chuyển ô trống."""
         zero_y, zero_x = find_pos(board, 0)
         neighbors = []
         possible_moves = ["U", "D", "L", "R"]
@@ -44,40 +44,30 @@ def solve_bfs(initial_board, goal_state, update_gui_callback):
                     new_board[new_y][new_x],
                     new_board[zero_y][zero_x],
                 )
-                neighbors.append((new_board, move))  # Store the move
+                neighbors.append((new_board, move))  # Lưu trạng thái và bước đi
         return neighbors
     
     def board_to_tuple(board):
-        """Converts a 2D board to a tuple for hashing."""
+        """Chuyển đổi bảng thành tuple để dùng làm khóa trong tập visited."""
         return tuple(sum(board, []))
 
     if not is_solvable(initial_board):
-        print("Initial board is unsolvable!")
-        return []
+        return []  # Trả về danh sách rỗng nếu trạng thái không giải được
 
-    initial_state = (initial_board, [])  # (board, path_to_here)
+    initial_state = (initial_board, [])  # (bảng, đường đi đến đây)
     queue = deque([initial_state])
     visited = {board_to_tuple(initial_board)}
     goal_tuple = board_to_tuple(goal_state)
     
-    def bfs_search():
-        while queue:
-            current_board, path = queue.popleft()
-            update_gui_callback(path)  # Update GUI with current path
-            time.sleep(0.1)  # Small delay to make updates visible
+    while queue:
+        current_board, path = queue.popleft()
+        if board_to_tuple(current_board) == goal_tuple:
+            return path  # Trả về đường đi nếu tìm thấy lời giải
 
-            if board_to_tuple(current_board) == goal_tuple:
-                print(f"✅ Solution found! Moves: {path}")
-                return path  # Solution found
-
-            for neighbor_board, move in get_neighbors(current_board):
-                neighbor_tuple = board_to_tuple(neighbor_board)
-                if neighbor_tuple not in visited:
-                    visited.add(neighbor_tuple)
-                    queue.append((neighbor_board, path + [move]))  # Append the move to the path
-        
-        print("No solution found.")
-        return []  # Return empty list if no solution found
+        for neighbor_board, move in get_neighbors(current_board):
+            neighbor_tuple = board_to_tuple(neighbor_board)
+            if neighbor_tuple not in visited:
+                visited.add(neighbor_tuple)
+                queue.append((neighbor_board, path + [move]))
     
-    search_thread = threading.Thread(target=bfs_search)
-    search_thread.start()
+    return []  # Trả về danh sách rỗng nếu không có lời giải

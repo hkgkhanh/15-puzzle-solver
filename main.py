@@ -1,3 +1,4 @@
+from bfs import solve_bfs
 from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
 from astar import solve_astar
@@ -78,15 +79,15 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [5,1,2,3],
-        [0,6,7,4],
-        [9,10,11,8],
-        [13,14,15,12]
+        [1,10,3,4],
+        [7,2,6,8],
+        [5,9,12,0],
+        [13,14,15,11]
     ]
     goal_state= GOAL_STATE
 
     # initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "A*", "Greedy Best First"]
+    algorithm_names = ["Layer by Layer", "A*", "Greedy Best First", "Breadth First Search"]
     all_solutions = []
     all_times = []
 
@@ -94,6 +95,7 @@ if __name__ == "__main__":
     lbl_board = copy.deepcopy(initial_board)
     astar_board = copy.deepcopy(initial_board)
     gbfs_board = copy.deepcopy(initial_board)
+    bfs_board = copy.deepcopy(initial_board)
 
     # run LBL
     start_time = time.perf_counter()
@@ -117,9 +119,17 @@ if __name__ == "__main__":
 
     all_times.append((end_time - start_time) * 1000)
 
+    # run BFS
+    start_time = time.perf_counter()
+    bfs_steps = solve_bfs(bfs_board, goal_state)
+    end_time = time.perf_counter()
+
+    all_times.append((end_time - start_time) * 1000)
+
     all_solutions.append(lbl_steps)
     all_solutions.append(astar_steps)
     all_solutions.append(gbfs_steps)
+    all_solutions.append(bfs_steps)
 
 
     # Tạo cửa sổ Tkinter
