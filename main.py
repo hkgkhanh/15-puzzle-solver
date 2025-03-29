@@ -77,43 +77,37 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [3, 15, 7, 8],
-        [12, 0, 5, 10],
-        [2, 1, 13, 14],
-        [6, 9, 4, 11]
+        [5,1,2,3],
+        [0,6,7,4],
+        [9,10,11,8],
+        [13,14,15,12]
     ]
     goal_state= GOAL_STATE
 
-    initial_board = scramble()
+    # initial_board = scramble()
     algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
     all_solutions = []
     all_times = []
 
-    # for y in range(4):
-    #     for x in range(4):
-    #         if initial_board[y][x] == 0:
-    #             print("\t", end="")
-    #         else:
-    #             print(initial_board[y][x], "\t", end="")
-    #     print("\n")
-
     running_board = copy.deepcopy(initial_board)
+    lbl_board = copy.deepcopy(initial_board)
+    astar_board = copy.deepcopy(initial_board)
 
     start_time = time.perf_counter()
     print(initial_board)
     print(goal_state)
 
-    lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
+    lbl_steps = solve_layer_by_layer(lbl_board, GOAL_STATE)
     
-    # lbl_steps = cancel_moves(lbl_steps)
+    lbl_steps = cancel_moves(lbl_steps)
 
-    # end_time = time.perf_counter()
+    end_time = time.perf_counter()
 
-    # all_times.append((end_time - start_time) * 1000)
+    all_times.append((end_time - start_time) * 1000)
 
     ida_steps = ["R", "R", "D"]
     
-    astar_steps = solve_astar(initial_board, goal_state)
+    astar_steps = solve_astar(astar_board, goal_state)
     print(astar_steps)
     other_steps = []
 
