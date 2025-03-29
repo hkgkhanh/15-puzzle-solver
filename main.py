@@ -1,4 +1,5 @@
 from layer_by_layer import solve_layer_by_layer
+from astar import solve_astar
 import os
 import platform
 import time
@@ -76,11 +77,12 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [11,8,13,3],
-        [12,1,7,5],
-        [0,6,15,4],
-        [9,10,2,14]
+        [3, 15, 7, 8],
+        [12, 0, 5, 10],
+        [2, 1, 13, 14],
+        [6, 9, 4, 11]
     ]
+    goal_state= GOAL_STATE
 
     initial_board = scramble()
     algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
@@ -98,17 +100,21 @@ if __name__ == "__main__":
     running_board = copy.deepcopy(initial_board)
 
     start_time = time.perf_counter()
+    print(initial_board)
+    print(goal_state)
 
     lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
+    
+    # lbl_steps = cancel_moves(lbl_steps)
 
-    lbl_steps = cancel_moves(lbl_steps)
+    # end_time = time.perf_counter()
 
-    end_time = time.perf_counter()
-
-    all_times.append((end_time - start_time) * 1000)
+    # all_times.append((end_time - start_time) * 1000)
 
     ida_steps = ["R", "R", "D"]
-    astar_steps = ["R", "R", "D", "L"]
+    
+    astar_steps = solve_astar(initial_board, goal_state)
+    print(astar_steps)
     other_steps = []
 
     all_solutions.append(lbl_steps)
