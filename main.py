@@ -159,6 +159,7 @@
 
 from layer_by_layer import solve_layer_by_layer
 from bfs import solve_bfs
+from ucs import solve_ucs  # Import UCS
 import os
 import platform
 import time
@@ -227,12 +228,12 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "IDA*", "A*", "BFS"]
+    algorithm_names = ["Layer by Layer", "IDA*", "A*", "UCS"]  # Changed BFS to UCS
     all_solutions = []
     all_times = []
 
     # Layer by Layer
-    running_board_lbl = copy.deepcopy(initial_board)  # Create a copy for Layer by Layer
+    running_board_lbl = copy.deepcopy(initial_board)
     start_time = time.perf_counter()
     lbl_steps = solve_layer_by_layer(running_board_lbl, GOAL_STATE)
     lbl_steps = cancel_moves(lbl_steps)
@@ -250,25 +251,27 @@ if __name__ == "__main__":
     all_solutions.append(astar_steps)
     all_times.append(100)
 
-    # BFS
-    running_board_bfs = copy.deepcopy(initial_board)  # Create a fresh copy for BFS
+    # UCS
+    running_board_ucs = copy.deepcopy(initial_board)  # Create a fresh copy for UCS
 
-    def update_gui(board):
-        """Callback function to update the GUI during BFS"""
-        app.puzzles[-1].board = copy.deepcopy(board)  # Update BFS puzzle board
-        app.puzzles[-1].draw_board()  # Redraw the board
-        root.update_idletasks()  # Refresh the UI
+    def update_gui(moves):  # Changed parameter name to 'moves' to be generic
+        """Callback function to update the GUI during UCS"""
+        app.puzzle.board = copy.deepcopy(initial_board)  # Reset board
+        app.puzzle.draw_board()
+        for move in moves:
+            app.puzzle.move_tile(move)
+            app.root.update_idletasks()
+            time.sleep(0.1)
 
     start_time = time.perf_counter()
-    bfs_steps = solve_bfs(running_board_bfs, GOAL_STATE, update_gui)  # Pass the callback
+    ucs_steps = solve_ucs(running_board_ucs, GOAL_STATE, update_gui)  # Use solve_ucs
     end_time = time.perf_counter()
 
-    all_solutions.append(bfs_steps if bfs_steps else [])
+    all_solutions.append(ucs_steps if ucs_steps else [])
     all_times.append((end_time - start_time) * 1000)
-
 
     root = tk.Tk()
     root.title("15 Puzzle Solver")
-    app = PuzzleSolverGUI(root, initial_board, algorithm_names, all_solutions, all_times) #Pass the initial board to the GUI
-    root.after(2000, lambda: app.update_puzzle(all_solutions))
+    app = PuzzleSolverGUI(root, initial_board, algorithm_names, all_solutions, all_times)
+    #root.after(2000, lambda: app.update_puzzle(all_solutions))
     root.mainloop()
