@@ -156,7 +156,7 @@ class PuzzleSolverGUI:
         self.scramble_label = tk.Label(root, text=f"Scramble: {get_scram_string(initial_board)}", font=("Arial", 12))
         self.scramble_label.pack(anchor="w", padx=10, pady=5)
 
-        self.log_label = tk.Label(root, text="Starting BFS...", font=("Arial", 10))
+        self.log_label = tk.Label(root, text="Starting...", font=("Arial", 10))
         self.log_label.pack(anchor="w", padx=10, pady=5)
 
         # Create frame for puzzle display
