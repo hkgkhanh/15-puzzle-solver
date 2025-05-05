@@ -226,7 +226,8 @@ def do_move(board, move):
 GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
-    initial_board = scramble()
+    # initial_board = scramble()
+    initial_board = [[14, 10, 7, 11], [5, 6, 2, 13], [3, 9, 12, 0], [8, 1, 15, 4]]
     algorithm_names = ["Layer by Layer", "IDA*", "A*", "BFS"]
     all_solutions = []
     all_times = []

@@ -174,10 +174,18 @@ class PuzzleSolverGUI:
 
     def run_bfs(self, board, all_solutions):
         """Execute BFS and update GUI dynamically."""
-        for move in all_solutions[0]:  # Assuming only BFS solution for now
-            time.sleep(0.1)  # Add delay for animation
+        start_time = time.time()  # ⏱️ Start timing
+        move_count = 0
+
+        for move in all_solutions[0]:  # Assuming only BFS solution
+            time.sleep(0.1)
             self.puzzle.animate_move(move)
-        self.update_log("✅ BFS Finished!")
+            move_count += 1
+
+        end_time = time.time()  # ⏱️ End timing
+        elapsed = (end_time - start_time) * 1000  # Convert to milliseconds
+
+        self.update_log(f"✅ BFS Finished in {elapsed:.2f} ms with {move_count} steps.")
 
     def update_log(self, message):
         self.log_label.config(text=message)
