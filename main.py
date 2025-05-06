@@ -1,5 +1,6 @@
 from bfs import solve_bfs
-from gbfs import greedy_best_first_search
+from ucs import ucs_solver
+# from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
 from astar import a_star_search
 from ida import ida_star
@@ -98,7 +99,8 @@ if __name__ == "__main__":
     running_board = copy.deepcopy(initial_board)
     lbl_board = copy.deepcopy(initial_board)
     astar_board = copy.deepcopy(initial_board)
-    gbfs_board = copy.deepcopy(initial_board)
+    # bfs_board = copy.deepcopy(initial_board)
+    ucs_board = copy.deepcopy(initial_board)
     astar_optimize_board = copy.deepcopy(initial_board)
     ida_board = copy.deepcopy(initial_board)
     # bfs_board = copy.deepcopy(initial_board)
@@ -112,12 +114,9 @@ if __name__ == "__main__":
     all_times.append((end_time - start_time) * 1000)
     
 
-    
-
-
     # run Greedy Best First Search
     start_time = time.perf_counter()
-    gbfs_steps = greedy_best_first_search(gbfs_board)
+    ucs_steps = ucs_solver(ucs_board)
     end_time = time.perf_counter()
     all_times.append((end_time - start_time) * 1000)
     
@@ -161,7 +160,7 @@ if __name__ == "__main__":
 
     all_solutions.append(lbl_steps)
 
-    all_solutions.append(gbfs_steps)
+    all_solutions.append(ucs_steps)
     all_solutions.append(ida_steps)
     all_solutions.append(astar_steps)
     # all_solutions.append(astar_optimized_steps) 

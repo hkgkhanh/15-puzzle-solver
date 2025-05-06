@@ -1,83 +1,65 @@
 import copy
 from collections import deque
-import threading
-import time
 
-def find_pos(board, value):
-    """Find the (row, col) position of a given value in the 4x4 board."""
-    for i in range(len(board)):
-        for j in range(len(board[i])):
-            if board[i][j] == value:
-                return (i, j)
-    return None
+GOAL_STATE = [[1, 2, 3, 4],
+              [5, 6, 7, 8],
+              [9, 10, 11, 12],
+              [13, 14, 15, 0]]
 
-def is_solvable(board):
-    """Check if a given 15-puzzle board is solvable."""
-    flat_board = sum(board, [])
-    inv_count = 0
+def find_pos(board, target):
+    for i in range(4):
+        for j in range(4):
+            if board[i][j] == target:
+                return i, j
 
-    for i in range(len(flat_board)):
-        for j in range(i + 1, len(flat_board)):
-            if flat_board[i] and flat_board[j] and flat_board[i] > flat_board[j]:
-                inv_count += 1
+def move_tile(board, zero_pos, tile_pos):
+    new_board = copy.deepcopy(board)
+    zx, zy = zero_pos
+    tx, ty = tile_pos
+    new_board[zx][zy], new_board[tx][ty] = new_board[tx][ty], new_board[zx][zy]
+    return new_board
 
-    zero_row = find_pos(board, 0)[0]  # Get row of blank (0)
-    return (inv_count % 2 == 0) if zero_row % 2 == 1 else (inv_count % 2 == 1)
+def get_neighbors(board):
+    zero_pos = find_pos(board, 0)
+    zx, zy = zero_pos
+    neighbors = []
+    moves = [
+        ("U", (zx - 1, zy)),  
+        ("D", (zx + 1, zy)),  
+        ("L", (zx, zy - 1)),  
+        ("R", (zx, zy + 1))  
+    ]
+    for move, (new_x, new_y) in moves:
+        if 0 <= new_x < 4 and 0 <= new_y < 4:
+            new_board = move_tile(board, zero_pos, (new_x, new_y))
+            neighbors.append((new_board, move))
+    return neighbors
 
-def solve_bfs(initial_board, goal_state, update_gui_callback):
-    """Solves the 15-puzzle using Breadth-First Search and updates the GUI in real-time."""
-    
-    def get_neighbors(board):
-        """Generates neighboring board states by moving the blank tile."""
-        zero_y, zero_x = find_pos(board, 0)
-        neighbors = []
-        possible_moves = ["U", "D", "L", "R"]
-        move_offsets = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
-        
-        for move in possible_moves:
-            dy, dx = move_offsets[move]
-            new_y, new_x = zero_y + dy, zero_x + dx
-            
-            if 0 <= new_y < 4 and 0 <= new_x < 4:
-                new_board = copy.deepcopy(board)
-                new_board[zero_y][zero_x], new_board[new_y][new_x] = (
-                    new_board[new_y][new_x],
-                    new_board[zero_y][zero_x],
-                )
-                neighbors.append((new_board, move))  # Store the move
-        return neighbors
-    
-    def board_to_tuple(board):
-        """Converts a 2D board to a tuple for hashing."""
-        return tuple(sum(board, []))
+def solve_bfs(initial_board):
+    start = tuple(tuple(row) for row in initial_board)
+    goal = tuple(tuple(row) for row in GOAL_STATE)
 
-    if not is_solvable(initial_board):
-        print("Initial board is unsolvable!")
+    if start == goal:
         return []
 
-    initial_state = (initial_board, [])  # (board, path_to_here)
-    queue = deque([initial_state])
-    visited = {board_to_tuple(initial_board)}
-    goal_tuple = board_to_tuple(goal_state)
-    
-    def bfs_search():
-        while queue:
-            current_board, path = queue.popleft()
-            update_gui_callback(path)  # Update GUI with current path
-            time.sleep(0.1)  # Small delay to make updates visible
+    queue = deque()
+    queue.append((start, []))
+    visited = set()
 
-            if board_to_tuple(current_board) == goal_tuple:
-                print(f"✅ Solution found! Moves: {path}")
-                return path  # Solution found
+    while queue:
+        current_tuple, moves = queue.popleft()
 
-            for neighbor_board, move in get_neighbors(current_board):
-                neighbor_tuple = board_to_tuple(neighbor_board)
-                if neighbor_tuple not in visited:
-                    visited.add(neighbor_tuple)
-                    queue.append((neighbor_board, path + [move]))  # Append the move to the path
-        
-        print("No solution found.")
-        return []  # Return empty list if no solution found
-    
-    search_thread = threading.Thread(target=bfs_search)
-    search_thread.start()
+        if current_tuple == goal:
+            return moves
+
+        if current_tuple in visited:
+            continue
+        visited.add(current_tuple)
+
+        current = [list(row) for row in current_tuple]
+        for next_board, move in get_neighbors(current):
+            next_tuple = tuple(tuple(row) for row in next_board)
+            if next_tuple not in visited:
+                queue.append((next_tuple, moves + [move]))
+
+    return None
