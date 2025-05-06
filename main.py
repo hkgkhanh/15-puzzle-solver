@@ -1,7 +1,9 @@
 from bfs import solve_bfs
 from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
-from astar import solve_astar
+from astar import a_star_search
+from ida import ida_star
+from astar_optimize import solve_astar_optimized
 import os
 import platform
 import time
@@ -79,15 +81,17 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [1,2,3,4],
-        [5,6,7,8],
-        [10,9,12,0],
-        [13,14,15,11]
-    ]
+    [2, 3, 5, 8],
+    [1, 6, 4, 7],
+    [10, 0, 9, 12],
+    [13, 14, 11, 15]
+]
+
+
     goal_state= GOAL_STATE
 
     # initial_board = scramble()
-    algorithm_names = ["Layer by Layer","A*","Greedy Best First Search"]
+    algorithm_names = ["Layer by Layer","Greedy Best First Search","IDA*","A*"]
     all_solutions = []
     all_times = []
 
@@ -95,7 +99,9 @@ if __name__ == "__main__":
     lbl_board = copy.deepcopy(initial_board)
     astar_board = copy.deepcopy(initial_board)
     gbfs_board = copy.deepcopy(initial_board)
-    bfs_board = copy.deepcopy(initial_board)
+    astar_optimize_board = copy.deepcopy(initial_board)
+    ida_board = copy.deepcopy(initial_board)
+    # bfs_board = copy.deepcopy(initial_board)
 
     # run LBL
     start_time = time.perf_counter()
@@ -105,30 +111,60 @@ if __name__ == "__main__":
 
     all_times.append((end_time - start_time) * 1000)
     
-    # run A*
-    start_time = time.perf_counter()
-    astar_steps = solve_astar(astar_board, goal_state)
-    end_time = time.perf_counter()
 
-    all_times.append((end_time - start_time) * 1000)
+    
+
 
     # run Greedy Best First Search
     start_time = time.perf_counter()
     gbfs_steps = greedy_best_first_search(gbfs_board)
     end_time = time.perf_counter()
+    all_times.append((end_time - start_time) * 1000)
+    
+    # run IDA*
+    start_time = time.perf_counter()
+    ida_steps = ida_star(ida_board)
+    ida_steps = cancel_moves(ida_steps)
+    end_time = time.perf_counter()
+    all_times.append((end_time - start_time) * 1000)
+    
+    # run A*
+    start_time = time.perf_counter()
+    astar_steps = a_star_search(astar_board)
+    end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
-
-    # # run BFS
+    
+    # # Run A* Optimized
     # start_time = time.perf_counter()
-    # bfs_steps = solve_bfs(bfs_board, goal_state)
+    # astar_optimized_steps = solve_astar_optimized(astar_optimize_board, GOAL_STATE)
+    # astar_optimized_steps = cancel_moves(astar_optimized_steps)
+    
+
+    # end_time = time.perf_counter()
+    
+    # all_times.append((end_time - start_time) * 1000)
+
+
+
+    # def update_gui(board):
+    #     """Callback function to update the GUI during BFS"""
+    #     app.puzzles[-1].board = copy.deepcopy(board)  # Update BFS puzzle board
+    #     app.puzzles[-1].draw_board()  # Redraw the board
+    #     root.update_idletasks()  # Refresh the UI
+
+    # start_time = time.perf_counter()
+    # bfs_steps = solve_bfs(bfs_board, GOAL_STATE, update_gui)  # Pass the callback
     # end_time = time.perf_counter()
 
     # all_times.append((end_time - start_time) * 1000)
 
     all_solutions.append(lbl_steps)
-    all_solutions.append(astar_steps)
+
     all_solutions.append(gbfs_steps)
+    all_solutions.append(ida_steps)
+    all_solutions.append(astar_steps)
+    # all_solutions.append(astar_optimized_steps) 
     # all_solutions.append(bfs_steps)
 
 
