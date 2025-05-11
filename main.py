@@ -1,4 +1,5 @@
 from layer_by_layer import solve_layer_by_layer
+from bfs_khanh import bfs_khanh
 import os
 import platform
 import time
@@ -76,14 +77,14 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [11,8,13,3],
-        [12,1,7,5],
-        [0,6,15,4],
-        [9,10,2,14]
+        [1,2,3,4],
+        [5,15,14,6],
+        [9,12,8,10],
+        [13,11,0,7]
     ]
 
-    initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "IDA*", "A*", "Other"]
+    # initial_board = scramble()
+    algorithm_names = ["Layer by Layer", "BFS"]
     all_solutions = []
     all_times = []
 
@@ -96,29 +97,30 @@ if __name__ == "__main__":
     #     print("\n")
 
     running_board = copy.deepcopy(initial_board)
+    lbl_board = copy.deepcopy(initial_board)
+    bfs_board = copy.deepcopy(initial_board)
 
     start_time = time.perf_counter()
-
-    lbl_steps = solve_layer_by_layer(initial_board, GOAL_STATE)
-
+    lbl_steps = solve_layer_by_layer(lbl_board, GOAL_STATE)
     lbl_steps = cancel_moves(lbl_steps)
-
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
+    print("LBL done")
 
-    ida_steps = ["R", "R", "D"]
-    astar_steps = ["R", "R", "D", "L"]
-    other_steps = []
+
+    start_time = time.perf_counter()
+    bfs_steps = bfs_khanh(bfs_board, GOAL_STATE)
+    bfs_steps = cancel_moves(bfs_steps)
+    end_time = time.perf_counter()
+
+    all_times.append((end_time - start_time) * 1000)
+    print("BFS done")
+    # print(" ".join(bfs_steps))
+
 
     all_solutions.append(lbl_steps)
-    all_solutions.append(ida_steps)
-    all_solutions.append(astar_steps)
-    all_solutions.append(other_steps)
-
-    all_times.append(0)
-    all_times.append(100)
-    all_times.append(123)
+    all_solutions.append(bfs_steps)
 
 
     # Tạo cửa sổ Tkinter
