@@ -2,6 +2,7 @@ from bfs import solve_bfs
 from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
 from astar import solve_astar
+from fringe_bfs import fringe_bfs
 import os
 import platform
 import time
@@ -86,16 +87,16 @@ if __name__ == "__main__":
     ]
     goal_state= GOAL_STATE
 
-    # initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "A*", "Greedy Best First", "Breadth First Search"]
+    initial_board = scramble()
+    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search"]
     all_solutions = []
     all_times = []
 
     running_board = copy.deepcopy(initial_board)
     lbl_board = copy.deepcopy(initial_board)
-    astar_board = copy.deepcopy(initial_board)
+    # astar_board = copy.deepcopy(initial_board)
     gbfs_board = copy.deepcopy(initial_board)
-    bfs_board = copy.deepcopy(initial_board)
+    fringebfs_board = copy.deepcopy(initial_board)
 
     # run LBL
     start_time = time.perf_counter()
@@ -104,13 +105,23 @@ if __name__ == "__main__":
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
+    print("LBL done")
     
     # run A*
+    # start_time = time.perf_counter()
+    # astar_steps = solve_astar(astar_board, goal_state)
+    # end_time = time.perf_counter()
+
+    # all_times.append((end_time - start_time) * 1000)
+
+    # run fringe-bfs
     start_time = time.perf_counter()
-    astar_steps = solve_astar(astar_board, goal_state)
+    fringebfs_steps = fringe_bfs(fringebfs_board, GOAL_STATE)
+    fringebfs_steps = cancel_moves(fringebfs_steps)
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
+    print("Fringe-BFS done")
 
     # run Greedy Best First Search
     start_time = time.perf_counter()
@@ -118,18 +129,12 @@ if __name__ == "__main__":
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
+    print("Greedy best first search done")
 
-    # run BFS
-    start_time = time.perf_counter()
-    bfs_steps = solve_bfs(bfs_board, goal_state)
-    end_time = time.perf_counter()
-
-    all_times.append((end_time - start_time) * 1000)
 
     all_solutions.append(lbl_steps)
-    all_solutions.append(astar_steps)
+    all_solutions.append(fringebfs_steps)
     all_solutions.append(gbfs_steps)
-    all_solutions.append(bfs_steps)
 
 
     # Tạo cửa sổ Tkinter
