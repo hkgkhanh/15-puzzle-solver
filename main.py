@@ -1,5 +1,5 @@
 from layer_by_layer import solve_layer_by_layer
-from bfs_khanh import bfs_khanh
+from fringe_bfs import fringe_bfs
 import os
 import platform
 import time
@@ -117,13 +117,12 @@ if __name__ == "__main__":
 
 
     start_time = time.perf_counter()
-    bfs_steps = bfs_khanh(bfs_board, GOAL_STATE)
+    bfs_steps = fringe_bfs(bfs_board, GOAL_STATE)
     bfs_steps = cancel_moves(bfs_steps)
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
     print("\nBFS done")
-    # print(" ".join(bfs_steps))
 
 
     all_solutions.append(lbl_steps)

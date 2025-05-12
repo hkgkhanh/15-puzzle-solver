@@ -140,7 +140,7 @@ def encode5913_board(board):
     return encode_str
 
 
-def bfs_khanh(board, GOAL_STATE):
+def fringe_bfs(board, GOAL_STATE):
     '''A state consists of the current board and set of moves to get to that board'''
 
 
