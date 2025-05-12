@@ -1,5 +1,6 @@
 import copy
 import itertools
+import sys
 
 
 def find_pos(board, target):
@@ -520,6 +521,10 @@ def bfs_khanh(board, GOAL_STATE):
         add_move(board, solution_steps, "L")
         add_move(board, solution_steps, "D")
 
+
+
+
+    ### BFS STARTS HERE ###
     solved_top_row_board = board
     solve_top_row_steps = solution_steps
 
@@ -529,8 +534,12 @@ def bfs_khanh(board, GOAL_STATE):
 
     while len(fringe) > 0:
         curr_state = fringe.pop(0)
-        board, _ = curr_state
+        board, curr_moves = curr_state
         visited.add(compress_board(board))
+
+        moves_checked = " ".join(curr_moves)
+        sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+        sys.stdout.flush()
 
         if is_solved_left_col(board, GOAL_STATE):
             solved_left_col_board, solve_left_col_steps = curr_state
@@ -551,8 +560,12 @@ def bfs_khanh(board, GOAL_STATE):
 
     while len(fringe) > 0:
         curr_state = fringe.pop(0)
-        board, _ = curr_state
+        board, curr_moves = curr_state
         visited.add(compress_board(board))
+
+        moves_checked = " ".join(curr_moves)
+        sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+        sys.stdout.flush()
 
         if is_solved_2_top_row(board, GOAL_STATE):
             solved_2_top_row_board, solve_2_top_row_steps = curr_state
@@ -573,8 +586,12 @@ def bfs_khanh(board, GOAL_STATE):
 
     while len(fringe) > 0:
         curr_state = fringe.pop(0)
-        board, _ = curr_state
+        board, curr_moves = curr_state
         visited.add(compress_board(board))
+
+        moves_checked = " ".join(curr_moves)
+        sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+        sys.stdout.flush()
 
         if is_solved(board, GOAL_STATE):
             solved_last_6_board, solve_last_6_steps = curr_state
