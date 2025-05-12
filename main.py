@@ -83,7 +83,14 @@ if __name__ == "__main__":
         [13,11,0,7]
     ]
 
-    # initial_board = scramble()
+    initial_board = [
+        [1,2,3,4],
+        [11,7,14,15],
+        [6,5,13,9],
+        [10,12,8,0]
+    ]
+
+    initial_board = scramble()
     algorithm_names = ["Layer by Layer", "BFS"]
     all_solutions = []
     all_times = []
