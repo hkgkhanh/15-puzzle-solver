@@ -122,7 +122,7 @@ if __name__ == "__main__":
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
-    print("BFS done")
+    print("\nBFS done")
     # print(" ".join(bfs_steps))
 
 
