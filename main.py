@@ -3,6 +3,7 @@ from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
 from astar import solve_astar
 from fringe_bfs import fringe_bfs
+from fringe_astar import fringe_astar
 import os
 import platform
 import time
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     goal_state= GOAL_STATE
 
     initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search"]
+    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search","Fringe-A*"]
     all_solutions = []
     all_times = []
 
@@ -97,6 +98,7 @@ if __name__ == "__main__":
     # astar_board = copy.deepcopy(initial_board)
     gbfs_board = copy.deepcopy(initial_board)
     fringebfs_board = copy.deepcopy(initial_board)
+    fringe_astar_board = copy.deepcopy(initial_board)
 
     # run LBL
     start_time = time.perf_counter()
@@ -130,12 +132,20 @@ if __name__ == "__main__":
 
     all_times.append((end_time - start_time) * 1000)
     print("Greedy best first search done")
+    
+    #run astar-bfs
+    start_time = time.perf_counter()
+    fringe_astar_steps=fringe_astar(fringe_astar_board, GOAL_STATE)
+    fringe_astar_steps = cancel_moves(fringe_astar_steps)
+    end_time = time.perf_counter()
+    all_times.append((end_time - start_time) * 1000)    
+    print("Fringe A* done")
 
 
     all_solutions.append(lbl_steps)
     all_solutions.append(fringebfs_steps)
     all_solutions.append(gbfs_steps)
-
+    all_solutions.append(fringe_astar_steps)
 
     # Tạo cửa sổ Tkinter
     root = tk.Tk()
