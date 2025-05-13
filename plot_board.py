@@ -61,30 +61,34 @@ class PuzzleSolverGUI:
             label2.grid(row=2, column=i, pady=5)
 
     def update_puzzle(self, all_solutions):
-        """
-        Cập nhật tất cả puzzles theo danh sách các bước giải.
-        all_solutions: List chứa danh sách bước giải của từng thuật toán
-        """
-        all_solved = False
-        step_index = 0
-        solved_puzzle = 0
+        # """
+        # Cập nhật tất cả puzzles theo danh sách các bước giải.
+        # all_solutions: List chứa danh sách bước giải của từng thuật toán
+        # """
+        # all_solved = False
+        # step_index = 0
+        # solved_puzzle = 0
 
-        while not all_solved:
-            time.sleep(0.1)
+        # while not all_solved:
+        #     time.sleep(0.1)
 
-            for i, puzzle in enumerate(self.puzzles):
-                if i < len(all_solutions):  # Đảm bảo không vượt quá số lượng thuật toán
-                    # puzzle.animate_solution(all_solutions[i])
-                    if step_index < len(all_solutions[i]):
-                        puzzle.animate_move(all_solutions[i][step_index])
+        #     for i, puzzle in enumerate(self.puzzles):
+        #         if i < len(all_solutions):  # Đảm bảo không vượt quá số lượng thuật toán
+        #             # puzzle.animate_solution(all_solutions[i])
+        #             if step_index < len(all_solutions[i]):
+        #                 puzzle.animate_move(all_solutions[i][step_index])
 
-                    if step_index == len(all_solutions[i]):
-                        solved_puzzle += 1
+        #             if step_index == len(all_solutions[i]):
+        #                 solved_puzzle += 1
             
-            if solved_puzzle == len(all_solutions):
-                all_solved = True
+        #     if solved_puzzle == len(all_solutions):
+        #         all_solved = True
 
-            step_index += 1
+        #     step_index += 1
+
+        for i, puzzle in enumerate(self.puzzles):
+            puzzle.animate_solution(all_solutions[i])
+            time.sleep(0.5)
 
 
 

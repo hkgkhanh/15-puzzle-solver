@@ -245,7 +245,7 @@ def fringe_astar(board, GOAL_STATE):
         _, _, _, curr_state = heapq.heappop(pq)
         board, curr_moves = curr_state
 
-        sys.stdout.write('\r\033[K' + " ".join(curr_moves))
+        sys.stdout.write('\r\033[K' + " ".join(solve_2_top_row_steps + curr_moves))
         sys.stdout.flush()
 
         if is_solved(board, GOAL_STATE):

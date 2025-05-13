@@ -143,7 +143,6 @@ def encode5913_board(board):
 def fringe_bfs(board, GOAL_STATE):
     '''A state consists of the current board and set of moves to get to that board'''
 
-
     ### SOLVE TOP ROW ###
     # fringe = [(copy.deepcopy(board), [])]
     # visited = set()
@@ -279,7 +278,7 @@ def fringe_bfs(board, GOAL_STATE):
         board, curr_moves = curr_state
         visited.add(compress_board(board))
 
-        moves_checked = " ".join(curr_moves)
+        moves_checked = " ".join(solve_2_top_row_steps + curr_moves)
         sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
         sys.stdout.flush()
 

@@ -81,65 +81,61 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-        [1,10,3,4],
-        [7,2,6,8],
-        [5,9,12,0],
-        [13,14,15,11]
+        [3,12,4,1],
+        [15,8,7,5],
+        [2,14,9,10],
+        [0,6,13,11]
     ]
     goal_state= GOAL_STATE
 
     initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search","Fringe-A*"]
+    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search", "Fringe-A*"]
     all_solutions = []
     all_times = []
 
     running_board = copy.deepcopy(initial_board)
     lbl_board = copy.deepcopy(initial_board)
-    # astar_board = copy.deepcopy(initial_board)
     gbfs_board = copy.deepcopy(initial_board)
     fringebfs_board = copy.deepcopy(initial_board)
     fringe_astar_board = copy.deepcopy(initial_board)
 
     # run LBL
+    print("start LBL")
     start_time = time.perf_counter()
     lbl_steps = solve_layer_by_layer(lbl_board, GOAL_STATE)
     lbl_steps = cancel_moves(lbl_steps)
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
-    print("LBL done")
-    
-    # run A*
-    # start_time = time.perf_counter()
-    # astar_steps = solve_astar(astar_board, goal_state)
-    # end_time = time.perf_counter()
-
-    # all_times.append((end_time - start_time) * 1000)
+    print("LBL done\n")
 
     # run fringe-bfs
+    print("start Fringe-BFS")
     start_time = time.perf_counter()
     fringebfs_steps = fringe_bfs(fringebfs_board, GOAL_STATE)
     fringebfs_steps = cancel_moves(fringebfs_steps)
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
-    print("Fringe-BFS done")
+    print("\nFringe-BFS done\n")
 
     # run Greedy Best First Search
+    print("start Greedy best first search")
     start_time = time.perf_counter()
     gbfs_steps = greedy_best_first_search(gbfs_board)
     end_time = time.perf_counter()
 
     all_times.append((end_time - start_time) * 1000)
-    print("Greedy best first search done")
+    print("Greedy best first search done\n")
     
-    #run astar-bfs
+    # run astar-bfs
+    print("start Fringe-A*")
     start_time = time.perf_counter()
     fringe_astar_steps=fringe_astar(fringe_astar_board, GOAL_STATE)
     fringe_astar_steps = cancel_moves(fringe_astar_steps)
     end_time = time.perf_counter()
     all_times.append((end_time - start_time) * 1000)    
-    print("Fringe A* done")
+    print("\nFringe A* done\n")
 
 
     all_solutions.append(lbl_steps)

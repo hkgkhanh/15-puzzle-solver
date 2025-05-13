@@ -1,5 +1,6 @@
 import copy
 import heapq
+import sys
 
 GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
@@ -62,6 +63,10 @@ def greedy_best_first_search(initial_board):
     
     while open_list:
         _, current_tuple, moves = heapq.heappop(open_list)
+
+        # moves_checked = " ".join(moves)
+        # sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+        # sys.stdout.flush()
         
         if current_tuple == goal:
             return moves

@@ -1,35 +1,6 @@
 import copy
 import sys
 
-# with open("top_row/1234.txt", "a") as file:
-
-
-            
-# def is_solved(board, goal):
-#     for i in range(4):
-#         for j in range(4):
-#             if board[i][j] != goal[i][j]:
-#                 return False
-#     return True
-
-# def is_solved_top_row(board, goal):
-#     for i in range(4):
-#         if board[0][i] != goal[0][i]:
-#             return False
-#     return True
-
-# def is_solved_left_col(board, goal):
-#     for i in range(4):
-#         if board[i][0] != goal[i][0]:
-#             return False
-#     return True
-
-# def is_solved_2_top_row(board, goal):
-#     for i in range(4):
-#         if board[1][i] != goal[1][i]:
-#             return False
-#     return True
-
 MAX_STATES_COUNT = 524160
 
 def find_pos(board, target):
