@@ -3,7 +3,7 @@ from gbfs import greedy_best_first_search
 from layer_by_layer import solve_layer_by_layer
 from astar import a_star_search
 from ida import ida_star
-from astar_optimize import solve_astar_optimized
+from astar_optimize import layered_solver
 import os
 import platform
 import time
@@ -81,17 +81,18 @@ GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 if __name__ == "__main__":
     initial_board = [
-    [2, 3, 5, 8],
-    [1, 6, 4, 7],
-    [10, 0, 9, 12],
+    [5, 1, 2, 4],
+    [0, 6, 3, 8],
+    [9, 10, 7, 12],
     [13, 14, 11, 15]
 ]
+
 
 
     goal_state= GOAL_STATE
 
     # initial_board = scramble()
-    algorithm_names = ["Layer by Layer","Greedy Best First Search","IDA*","A*"]
+    algorithm_names = ["Layer by Layer"]
     all_solutions = []
     all_times = []
 
@@ -112,34 +113,31 @@ if __name__ == "__main__":
     all_times.append((end_time - start_time) * 1000)
     
 
-    
 
-
-    # run Greedy Best First Search
-    start_time = time.perf_counter()
-    gbfs_steps = greedy_best_first_search(gbfs_board)
-    end_time = time.perf_counter()
-    all_times.append((end_time - start_time) * 1000)
+    # # run Greedy Best First Search
+    # start_time = time.perf_counter()
+    # gbfs_steps = greedy_best_first_search(gbfs_board)
+    # end_time = time.perf_counter()
+    # all_times.append((end_time - start_time) * 1000)
     
-    # run IDA*
-    start_time = time.perf_counter()
-    ida_steps = ida_star(ida_board)
-    ida_steps = cancel_moves(ida_steps)
-    end_time = time.perf_counter()
-    all_times.append((end_time - start_time) * 1000)
+    # # run IDA*
+    # start_time = time.perf_counter()
+    # ida_steps = ida_star(ida_board)
+    # ida_steps = cancel_moves(ida_steps)
+    # end_time = time.perf_counter()
+    # all_times.append((end_time - start_time) * 1000)
     
-    # run A*
-    start_time = time.perf_counter()
-    astar_steps = a_star_search(astar_board)
-    end_time = time.perf_counter()
+    # # run A*
+    # start_time = time.perf_counter()
+    # astar_steps = a_star_search(astar_board)
+    # end_time = time.perf_counter()
 
-    all_times.append((end_time - start_time) * 1000)
+    # all_times.append((end_time - start_time) * 1000)
+    
     
     # # Run A* Optimized
     # start_time = time.perf_counter()
-    # astar_optimized_steps = solve_astar_optimized(astar_optimize_board, GOAL_STATE)
-    # astar_optimized_steps = cancel_moves(astar_optimized_steps)
-    
+    # astar_optimized_steps = layered_solver(astar_optimize_board)
 
     # end_time = time.perf_counter()
     
@@ -160,10 +158,9 @@ if __name__ == "__main__":
     # all_times.append((end_time - start_time) * 1000)
 
     all_solutions.append(lbl_steps)
-
-    all_solutions.append(gbfs_steps)
-    all_solutions.append(ida_steps)
-    all_solutions.append(astar_steps)
+    # all_solutions.append(gbfs_steps)
+    # all_solutions.append(ida_steps)
+    # all_solutions.append(astar_steps)
     # all_solutions.append(astar_optimized_steps) 
     # all_solutions.append(bfs_steps)
 
