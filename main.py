@@ -79,7 +79,8 @@ def do_move(board, move): # R = 0 to right, L = 0 to left, U = 0 to up, D = 0 to
 GOAL_STATE = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
 
 
-if __name__ == "__main__":
+
+def main():
     initial_board = [
         [3,12,4,1],
         [15,8,7,5],
@@ -150,6 +151,9 @@ if __name__ == "__main__":
     root.after(2000, lambda: app.update_puzzle(all_solutions))
     root.mainloop()
 
+
+if __name__ == "__main__":
+    main()
 
 
     # clear_terminal()
