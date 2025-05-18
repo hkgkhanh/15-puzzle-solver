@@ -210,7 +210,57 @@ def fringe_astar(board, GOAL_STATE):
     solved_left_col_board = init_board
     solve_left_col_steps = copy.deepcopy(solution_steps)
 
-    # Giải hàng thứ 2 bằng A*
+    # # Giải hàng thứ 2 bằng A*
+    # pq = [(heuristic(solved_left_col_board, GOAL_STATE), 0, compress_board(solved_left_col_board), (copy.deepcopy(solved_left_col_board), []))]
+    # heapq.heapify(pq)
+    # visited = set()
+    # visited.add(compress_board(solved_left_col_board))
+
+    # while pq:
+    #     _, _, _, curr_state = heapq.heappop(pq)
+    #     board, curr_moves = curr_state
+
+    #     sys.stdout.write('\r\033[K' + " ".join(curr_moves))
+    #     sys.stdout.flush()
+
+    #     if is_solved_2_top_row(board, GOAL_STATE):
+    #         solved_2_top_row_board, solve_2_top_row_steps = curr_state
+    #         break
+        
+    #     next_states = get_next_states(curr_state, 1, 1)
+    #     for next_state in next_states:
+    #         next_board, next_moves = next_state
+    #         board_str = compress_board(next_board)
+    #         if board_str not in visited:
+    #             visited.add(board_str)
+    #             heapq.heappush(pq, (len(next_moves) + heuristic(next_board, GOAL_STATE), len(next_moves), board_str, next_state))
+
+    # # Giải 3x3 cuối cùng bằng A*
+    # pq = [(heuristic(solved_2_top_row_board, GOAL_STATE), 0, compress_board(solved_2_top_row_board), (copy.deepcopy(solved_2_top_row_board), []))]
+    # heapq.heapify(pq)
+    # visited = set()
+    # visited.add(compress_board(solved_2_top_row_board))
+
+    # while pq:
+    #     _, _, _, curr_state = heapq.heappop(pq)
+    #     board, curr_moves = curr_state
+
+    #     sys.stdout.write('\r\033[K' + " ".join(solve_2_top_row_steps + curr_moves))
+    #     sys.stdout.flush()
+
+    #     if is_solved(board, GOAL_STATE):
+    #         solved_last_6_board, solve_last_6_steps = curr_state
+    #         return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps, solve_last_6_steps))
+        
+    #     next_states = get_next_states(curr_state, 1, 2)
+    #     for next_state in next_states:
+    #         next_board, next_moves = next_state
+    #         board_str = compress_board(next_board)
+    #         if board_str not in visited:
+    #             visited.add(board_str)
+    #             heapq.heappush(pq, (len(next_moves) + heuristic(next_board, GOAL_STATE), len(next_moves), board_str, next_state))
+
+    # Giải 3x3 cuối cùng bằng A*
     pq = [(heuristic(solved_left_col_board, GOAL_STATE), 0, compress_board(solved_left_col_board), (copy.deepcopy(solved_left_col_board), []))]
     heapq.heapify(pq)
     visited = set()
@@ -223,9 +273,9 @@ def fringe_astar(board, GOAL_STATE):
         sys.stdout.write('\r\033[K' + " ".join(curr_moves))
         sys.stdout.flush()
 
-        if is_solved_2_top_row(board, GOAL_STATE):
-            solved_2_top_row_board, solve_2_top_row_steps = curr_state
-            break
+        if is_solved(board, GOAL_STATE):
+            solved_8puzzle_board, solve_8puzzle_steps = curr_state
+            return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_8puzzle_steps))
         
         next_states = get_next_states(curr_state, 1, 1)
         for next_state in next_states:
@@ -235,29 +285,5 @@ def fringe_astar(board, GOAL_STATE):
                 visited.add(board_str)
                 heapq.heappush(pq, (len(next_moves) + heuristic(next_board, GOAL_STATE), len(next_moves), board_str, next_state))
 
-    # Giải 3x3 cuối cùng bằng A*
-    pq = [(heuristic(solved_2_top_row_board, GOAL_STATE), 0, compress_board(solved_2_top_row_board), (copy.deepcopy(solved_2_top_row_board), []))]
-    heapq.heapify(pq)
-    visited = set()
-    visited.add(compress_board(solved_2_top_row_board))
-
-    while pq:
-        _, _, _, curr_state = heapq.heappop(pq)
-        board, curr_moves = curr_state
-
-        sys.stdout.write('\r\033[K' + " ".join(solve_2_top_row_steps + curr_moves))
-        sys.stdout.flush()
-
-        if is_solved(board, GOAL_STATE):
-            solved_last_6_board, solve_last_6_steps = curr_state
-            return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps, solve_last_6_steps))
-        
-        next_states = get_next_states(curr_state, 1, 2)
-        for next_state in next_states:
-            next_board, next_moves = next_state
-            board_str = compress_board(next_board)
-            if board_str not in visited:
-                visited.add(board_str)
-                heapq.heappush(pq, (len(next_moves) + heuristic(next_board, GOAL_STATE), len(next_moves), board_str, next_state))
 
     return None

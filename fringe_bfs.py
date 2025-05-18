@@ -243,7 +243,58 @@ def fringe_bfs(board, GOAL_STATE):
     solve_left_col_steps = copy.deepcopy(solution_steps)
 
 
-    ### SOLVE SECOND TOP ROW ###
+    # ### SOLVE SECOND TOP ROW ###
+    # fringe = [(copy.deepcopy(solved_left_col_board), [])]
+    # visited = set()
+
+    # while len(fringe) > 0:
+    #     curr_state = fringe.pop(0)
+    #     board, curr_moves = curr_state
+    #     visited.add(compress_board(board))
+
+    #     moves_checked = " ".join(curr_moves)
+    #     sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+    #     sys.stdout.flush()
+
+    #     if is_solved_2_top_row(board, GOAL_STATE):
+    #         solved_2_top_row_board, solve_2_top_row_steps = curr_state
+    #         # return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps))
+    #         break
+        
+    #     next_states = get_next_states(curr_state, 1, 1)
+    #     # if len(next_states) > 0:
+    #     #     fringe.extend(next_states)
+    #     for next_state in next_states:
+    #         next_board, _ = next_state
+    #         if compress_board(next_board) not in visited:
+    #             fringe.append(next_state)
+
+    # ### SOLVE LAST 6 PIECE ###
+    # fringe = [(copy.deepcopy(solved_2_top_row_board), [])]
+    # visited = set()
+
+    # while len(fringe) > 0:
+    #     curr_state = fringe.pop(0)
+    #     board, curr_moves = curr_state
+    #     visited.add(compress_board(board))
+
+    #     moves_checked = " ".join(solve_2_top_row_steps + curr_moves)
+    #     sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
+    #     sys.stdout.flush()
+
+    #     if is_solved(board, GOAL_STATE):
+    #         solved_last_6_board, solve_last_6_steps = curr_state
+    #         return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps, solve_last_6_steps))
+        
+    #     next_states = get_next_states(curr_state, 1, 2)
+    #     # if len(next_states) > 0:
+    #     #     fringe.extend(next_states)
+    #     for next_state in next_states:
+    #         next_board, _ = next_state
+    #         if compress_board(next_board) not in visited:
+    #             fringe.append(next_state)
+
+    ### SOLVE LAST 8-PUZZLE ###
     fringe = [(copy.deepcopy(solved_left_col_board), [])]
     visited = set()
 
@@ -256,37 +307,11 @@ def fringe_bfs(board, GOAL_STATE):
         sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
         sys.stdout.flush()
 
-        if is_solved_2_top_row(board, GOAL_STATE):
-            solved_2_top_row_board, solve_2_top_row_steps = curr_state
-            # return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps))
-            break
+        if is_solved(board, GOAL_STATE):
+            solve_8puzzle_board, solve_8puzzle_steps = curr_state
+            return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_8puzzle_steps))
         
         next_states = get_next_states(curr_state, 1, 1)
-        # if len(next_states) > 0:
-        #     fringe.extend(next_states)
-        for next_state in next_states:
-            next_board, _ = next_state
-            if compress_board(next_board) not in visited:
-                fringe.append(next_state)
-
-    ### SOLVE LAST 6 PIECE ###
-    fringe = [(copy.deepcopy(solved_2_top_row_board), [])]
-    visited = set()
-
-    while len(fringe) > 0:
-        curr_state = fringe.pop(0)
-        board, curr_moves = curr_state
-        visited.add(compress_board(board))
-
-        moves_checked = " ".join(solve_2_top_row_steps + curr_moves)
-        sys.stdout.write('\r\033[K' + moves_checked)  # Xóa dòng cũ và ghi dòng mới
-        sys.stdout.flush()
-
-        if is_solved(board, GOAL_STATE):
-            solved_last_6_board, solve_last_6_steps = curr_state
-            return list(itertools.chain(solve_top_row_steps, solve_left_col_steps, solve_2_top_row_steps, solve_last_6_steps))
-        
-        next_states = get_next_states(curr_state, 1, 2)
         # if len(next_states) > 0:
         #     fringe.extend(next_states)
         for next_state in next_states:

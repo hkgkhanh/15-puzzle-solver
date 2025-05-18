@@ -57,7 +57,7 @@ class PuzzleSolverGUI:
             label1 = tk.Label(self.main_frame, text=algorithms[i], font=("Arial", 10, "bold"))
             label1.grid(row=1, column=i, pady=5)
 
-            label2 = tk.Label(self.main_frame, text=f"Solution found in {self.all_times[i]:.5f} ms\nMove count: {len(self.all_solutions[i])}", font=("Arial", 10))
+            label2 = tk.Label(self.main_frame, text=f"Solution found in {self.all_times[i]:.2f} ms\nMove count: {len(self.all_solutions[i])}", font=("Arial", 10))
             label2.grid(row=2, column=i, pady=5)
 
     def update_puzzle(self, all_solutions):
@@ -113,7 +113,10 @@ class PuzzleGUI:
                 if value != 0:  # Không vẽ ô trống
                     x1, y1 = j * tile_size, i * tile_size
                     x2, y2 = x1 + tile_size, y1 + tile_size
-                    self.canvas.create_rectangle(x1, y1, x2, y2, fill="lightgray")
+                    if value == i * 4 + j + 1:
+                        self.canvas.create_rectangle(x1, y1, x2, y2, fill="#66c266")
+                    else:
+                        self.canvas.create_rectangle(x1, y1, x2, y2, fill="lightgray")
                     self.canvas.create_text(x1 + 25, y1 + 25, text=str(value), font=("Arial", 14, "bold"))
 
     def move_tile(self, move):

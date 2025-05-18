@@ -1,3 +1,5 @@
+// CREDIT GOES TO Jaap Scherphuis, VISIT https://www.jaapsch.net/puzzles/javascript/fifteenj.htm
+
 function solve(){
     if(mode==0||mode==1){
         mode=3;blocksolve=1;displaybut();

@@ -90,7 +90,7 @@ def main():
     goal_state= GOAL_STATE
 
     initial_board = scramble()
-    algorithm_names = ["Layer by Layer", "Fringe-BFS", "Greedy Best First Search", "Fringe-A*"]
+    algorithm_names = ["Layer by Layer", "Greedy Best First Search", "Fringe-BFS", "Fringe-A*"]
     all_solutions = []
     all_times = []
 
@@ -110,6 +110,15 @@ def main():
     all_times.append((end_time - start_time) * 1000)
     print("LBL done\n")
 
+    # run Greedy Best First Search
+    print("start Greedy best first search")
+    start_time = time.perf_counter()
+    gbfs_steps = greedy_best_first_search(gbfs_board)
+    end_time = time.perf_counter()
+
+    all_times.append((end_time - start_time) * 1000)
+    print("Greedy best first search done\n")
+
     # run fringe-bfs
     print("start Fringe-BFS")
     start_time = time.perf_counter()
@@ -119,15 +128,6 @@ def main():
 
     all_times.append((end_time - start_time) * 1000)
     print("\nFringe-BFS done\n")
-
-    # run Greedy Best First Search
-    print("start Greedy best first search")
-    start_time = time.perf_counter()
-    gbfs_steps = greedy_best_first_search(gbfs_board)
-    end_time = time.perf_counter()
-
-    all_times.append((end_time - start_time) * 1000)
-    print("Greedy best first search done\n")
     
     # run astar-bfs
     print("start Fringe-A*")
@@ -140,8 +140,8 @@ def main():
 
 
     all_solutions.append(lbl_steps)
-    all_solutions.append(fringebfs_steps)
     all_solutions.append(gbfs_steps)
+    all_solutions.append(fringebfs_steps)
     all_solutions.append(fringe_astar_steps)
 
     # Tạo cửa sổ Tkinter
