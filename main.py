@@ -87,6 +87,12 @@ def main():
         [2,14,9,10],
         [0,6,13,11]
     ]
+    initial_board = [
+        [9,11,12,0],
+        [2,4,6,3],
+        [13,14,7,1],
+        [5,8,10,15]
+    ]
     goal_state= GOAL_STATE
 
     initial_board = scramble()
